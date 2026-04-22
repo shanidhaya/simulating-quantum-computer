@@ -14,8 +14,8 @@ from quantum_gates import (
     apply, STANDARD_GATES, is_unitary,
 )
 from bloch_sphere import (
-    plot_bloch_panels, 
-    plot_all_states_single_sphere, 
+    plot_bloch_panels,
+    plot_all_states_single_sphere,
     get_bloch_coords
 )
 
@@ -27,7 +27,8 @@ print("  Quantum Gate Simulation  (Nielsen & Chuang 4.2)")
 print("=" * 55)
 
 bx, by, bz = get_bloch_coords(ket1)
-print(f"\nInitial state |1>  →  Bloch vector: ({bx:.3f}, {by:.3f}, {bz:.3f})\n")
+print(
+    f"\nInitial state |1>  →  Bloch vector: ({bx:.3f}, {by:.3f}, {bz:.3f})\n")
 print(f"{'Gate':<14}  {'α (|0> amp)':<20}  {'β (|1> amp)':<20}  Bloch (x, y, z)")
 print("-" * 80)
 
@@ -49,14 +50,14 @@ gate_specs = [
 entries = []
 for label, gate, color in gate_specs:
     out = apply(gate, ket1)
-    
+
     alpha = out.full()[0, 0]
     beta = out.full()[1, 0]
     bx, by, bz = get_bloch_coords(out)
-    
+
     alpha_str = f"{alpha.real:+.3f}{alpha.imag:+.3f}j"
     beta_str = f"{beta.real:+.3f}{beta.imag:+.3f}j"
-    
+
     print(f"{label:<14}  {alpha_str:<20}  {beta_str:<20}  ({bx:+.3f}, {by:+.3f}, {bz:+.3f})")
     entries.append((label, out, color))
 
@@ -69,10 +70,10 @@ for label, gate, _ in gate_specs:
 # ── 4.  Render Figures ────────────────────────────────────────────────────────
 print("\nRendering figures …")
 
-std_entries  = [e for e in entries if e[0] in 
-                {"X  (Pauli-X)", "Y  (Pauli-Y)", "Z  (Pauli-Z)",
-                 "H  (Hadamard)", "S  (Phase)", "T  (π/8)"}]
-rot_entries  = [e for e in entries if "R" in e[0]]
+std_entries = [e for e in entries if e[0] in
+               {"X  (Pauli-X)", "Y  (Pauli-Y)", "Z  (Pauli-Z)",
+                "H  (Hadamard)", "S  (Phase)", "T  (π/8)"}]
+rot_entries = [e for e in entries if "R" in e[0]]
 
 # Call functions from bloch_sphere.py
 fig_std = plot_bloch_panels(
@@ -88,8 +89,8 @@ fig_rot = plot_bloch_panels(
 )
 
 fig_all = plot_all_states_single_sphere(
-    entries, initial_state=ket1, 
+    entries, initial_state=ket1,
     filename="bloch_all_gates.png"
 )
 
-print("\nDone. Three figures produced.")
+print("\nDone.")
