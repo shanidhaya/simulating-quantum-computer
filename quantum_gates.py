@@ -6,7 +6,7 @@ Part 1 — Single Qubit Gates (Nielsen & Chuang 4.2)
 
 import numpy as np
 import qutip as qt
-from qutip_qip.operations import hadamard_transform, phasegate, rx, ry, rz
+from qutip_qip.operations import hadamard_transform, phasegate, rx, ry, rz,cnot, iswap,toffoli,expand_operator
 
 # ______________________________________________________________________________
 # 1.  STANDARD GATES
@@ -53,7 +53,21 @@ def Rz(theta: float) -> qt.Qobj:
     """Rotation by *theta* about the z-axis of the Bloch sphere."""
     return rz(theta)
 
+# ______________________________________________________________________________
+#   Multi qubit gates
+# ______________________________________________________________________________
 
+def CNOT(N: int = 2, control: int = 0, target: int = 1) -> qt.Qobj:
+    
+    return cnot(N, control, target)
+
+def ISWAP(N: int = 2, targets: list[int] = [0, 1]) -> qt.Qobj:
+    
+    return iswap(N, targets)
+
+def TOFFOLI(N: int = 3, controls: list[int] = [0, 1], target: int = 2) -> qt.Qobj:
+    
+    return toffoli(N, controls, target)
 # ______________________________________________________________________________
 # 3.  UTILITIES
 # ______________________________________________________________________________
@@ -66,15 +80,14 @@ def is_unitary(U: qt.Qobj) -> bool:
 def apply(gate: qt.Qobj, state: qt.Qobj) -> qt.Qobj:
     return gate * state
 
+def apply_single_gate(gate: qt.Qobj, N: int, target: int) -> qt.Qobj:
+    """Expands a 1-qubit gate to an N-qubit system and returns the operator."""
+    return expand_operator(gate, N=N, targets=[target])
+
+def get_state_vector(state: qt.Qobj) -> np.ndarray:
+    """Reads out the state vector as a standard 1D numpy array."""
+    return state.full().flatten()
 
 # ── Quick self-test ───────────────────────────────────────────────────────────
 if __name__ == "__main__":
-    for name, G in STANDARD_GATES.items():
-        print(f"  {name}: {'Unitary' if is_unitary(G) else 'Not Unitary'}")
-        
-    for name, fn in [("Rx(π/3)", Rx(np.pi / 3)),
-                     ("Ry(π/4)", Ry(np.pi / 4)),
-                     ("Rz(π/6)", Rz(np.pi / 6))]:
-        print(f"  {name}: {'Unitary' if is_unitary(fn) else 'Not Unitary'}")
-        
-    print("\nAll gates defined successfully using QuTiP.")
+    print("Gates done")
