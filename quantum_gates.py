@@ -88,6 +88,21 @@ def get_state_vector(state: qt.Qobj) -> np.ndarray:
     """Reads out the state vector as a standard 1D numpy array."""
     return state.full().flatten()
 
+
+
+# This dictionary maps a string instruction to the raw QuTiP gate matrix.
+# The Circuit Engine will use this to look up gates automatically.
+GATE_DICTIONARY = {
+    'X': X,
+    'Y': Y,
+    'Z': Z,
+    'H': H,
+    'S': S,
+    'T': T,
+    'CNOT': cnot(),       
+    'ISWAP': iswap(),     
+    'TOFFOLI': toffoli()  
+}
 # ── Quick self-test ───────────────────────────────────────────────────────────
 if __name__ == "__main__":
     print("Gates done")
