@@ -48,6 +48,22 @@ def draw_ascii_circuit(num_qubits: int, layers_instructions: list):
                 layer_repr[q1] = "──x──"
                 layer_repr[q2] = "──x──"
                 min_q, max_q = min(q1, q2), max(q1, q2)
+                
+            elif gate_name.startswith('C-') and gate_name != 'CNOT':
+                # Dynamic 2-Qubit Gate (e.g., C-H, C-Z)
+                base_gate = gate_name.split('-')[1]
+                c, t = targets[0], targets[1]
+                
+                # Draw the Control dot
+                layer_repr[c] = "──■──"
+                
+                # Draw the Target gate (e.g., [H])
+                target_str = f"[{base_gate}]"
+                pad_left = (col_width - len(target_str)) // 2
+                pad_right = col_width - len(target_str) - pad_left
+                layer_repr[t] = "─" * pad_left + target_str + "─" * pad_right
+                
+                min_q, max_q = min(c, t), max(c, t)
 
         # Draw vertical connection lines for 2-qubit gates
         if min_q != -1:

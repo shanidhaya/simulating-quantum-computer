@@ -77,7 +77,12 @@ def generate_random_circuit(num_qubits: int, num_layers: int, qubits: list[int] 
             q1, q2 = random.sample(qubits, 2)
             
             # Randomly pick a 2-qubit gate type
+            """
             gate_type = random.choice(['CNOT', 'ISWAP'])
+            """
+            # Randomly pick a 2-qubit gate type (Now with dynamic controlled gates!)
+            two_qubit_options = ['CNOT', 'ISWAP', 'C-H', 'C-Z', 'C-X', 'C-Y']
+            gate_type = random.choice(two_qubit_options)
             
             # Apply the 2-qubit instruction
             combined_gate = apply_instruction(combined_gate, [gate_type, [q1, q2]])
@@ -85,9 +90,11 @@ def generate_random_circuit(num_qubits: int, num_layers: int, qubits: list[int] 
             
             if gate_type == 'CNOT':
                 desc = f"2-qubit layer: CNOT(control={q1}, target={q2})"
-            else:
+            elif gate_type == 'ISWAP':
                 desc = f"2-qubit layer: ISWAP(targets=[{q1}, {q2}])"
-                
+            else:
+                desc = f"2-qubit layer: {gate_type}(control={q1}, target={q2})"    
+            
             circuit_operators.append(combined_gate)
             circuit_descriptions.append(desc)
             
