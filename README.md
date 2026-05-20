@@ -7,9 +7,9 @@ Built as part of the Physics F-Praktikum course, following theoretical foundatio
 ## Features
 * **Instruction-Based Circuit Engine:** Build arbitrary quantum circuits using human-readable instructions (e.g., `['H', [0]]`).
 * **Automated $N$-Qubit Embedding:** Seamlessly applies 1-qubit and 2-qubit gates to complex $N$-qubit systems using automated tensor product expansions.
-* **Dynamic Controlled Gates:* Engine dynamically calculates and generates controlled versions of arbitrary single-qubit gates (e.g., Controlled-Hadamard, Controlled-Z) on the fly without requiring hardcoded matrices.
-* **Density Matrix Support:* Executes quantum evolution on both pure states (state vectors) and mixed states (density matrices), laying the groundwork for real-world noise simulation.
-* **Quantum Measurement:* Simulates projective measurements in the computational basis, accurately calculating measurement probabilities and applying post-measurement wave-function collapse.
+* **Dynamic Controlled Gates:** Engine dynamically calculates and generates controlled versions of arbitrary single-qubit gates (e.g., Controlled-Hadamard, Controlled-Z) on the fly without requiring hardcoded matrices.
+* **Density Matrix Support:** Executes quantum evolution on both pure states (state vectors) and mixed states (density matrices), laying the groundwork for real-world noise simulation.
+* **Quantum Measurement:** Simulates projective measurements in the computational basis, accurately calculating measurement probabilities and applying post-measurement wave-function collapse.
 * **Random Circuit Generation:** Dynamically construct arbitrary $N$-qubit quantum circuits of a specified depth, mixing single-qubit and multi-qubit layers.
 * **ASCII Circuit Visualization:** Automatically parse circuit instructions and draw intuitive terminal-based wire diagrams showing gates, controls, and targets.
 * **Performance Benchmarking:** Automated stress-testing to evaluate computational scaling and execution time across different numbers of qubits.
@@ -39,6 +39,6 @@ Built as part of the Physics F-Praktikum course, following theoretical foundatio
 * [x] **ASCII Visualization & Asserts:** Added terminal-based circuit wire diagrams and silent mathematical asserts to verify matrix shape and unitarity at scale.
 
 **Milestones (This Week):*
-* [x] **Dynamic Controlled Gates:* Upgraded the circuit engine to interpret and mathematically construct arbitrary controlled operations (e.g., C-H, C-Z) on the fly using projection operators. Updated generator and visualizer to support them.
-* [x] **Density Matrix Integration:* Refactored the core execution loop to natively route and compute both pure state vectors (via the Schrödinger picture) and mixed density matrices (via the von Neumann equation).
-* [x] **Computational Measurement:* Implemented classical projective measurements, allowing the simulator to calculate state probabilities and perform mathematical wave-function collapse based on randomly weighted outcomes.
+* [x] **Dynamic Controlled Gates:** Upgraded the circuit engine to interpret and mathematically construct arbitrary controlled operations (e.g., C-H, C-Z) on the fly using projection operators. Updated generator and visualizer to support them.
+* [x] **Density Matrix Integration:** Refactored the core execution loop to natively route and compute both pure state vectors (via the Schrödinger picture) and mixed density matrices (via the von Neumann equation).
+* [x] **Computational Measurement:** Implemented classical projective measurements, allowing the simulator to calculate state probabilities and perform mathematical wave-function collapse based on randomly weighted outcomes.
