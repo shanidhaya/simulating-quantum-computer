@@ -38,7 +38,7 @@ Built as part of the Physics F-Praktikum course, following theoretical foundatio
 * [x] **Performance Benchmarking:** Created a stress-test loop executing 1000-layer circuits, comparing Dense vs. Sparse execution times, and generating logarithmic performance plots up to a 2-minute compute limit.
 * [x] **ASCII Visualization & Asserts:** Added terminal-based circuit wire diagrams and silent mathematical asserts to verify matrix shape and unitarity at scale.
 
-**Milestones (This Week):*
+**Milestones (This Week):**
 * [x] **Dynamic Controlled Gates:** Upgraded the circuit engine to interpret and mathematically construct arbitrary controlled operations (e.g., C-H, C-Z) on the fly using projection operators. Updated generator and visualizer to support them.
 * [x] **Density Matrix Integration:** Refactored the core execution loop to natively route and compute both pure state vectors (via the Schrödinger picture) and mixed density matrices (via the von Neumann equation).
 * [x] **Computational Measurement:** Implemented classical projective measurements, allowing the simulator to calculate state probabilities and perform mathematical wave-function collapse based on randomly weighted outcomes.
