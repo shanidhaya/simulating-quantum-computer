@@ -6,7 +6,7 @@ Parses and executes quantum circuit instructions using QuTiP.
 
 import qutip as qt
 from qutip_qip.operations import expand_operator
-from quantum_gates import GATE_DICTIONARY
+from quantum_gates import GATE_DICTIONARY,Rx, Ry, Rz
 import random
 import numpy as np
 
@@ -36,12 +36,21 @@ def apply_instruction(state: qt.Qobj, instruction: list) -> qt.Qobj:
     
     return new_state
     """
+    # 1. Check if there are parameters (like an angle 'theta')
+    params = instruction[2] if len(instruction) > 2 else []
+    # 2. Build the Raw Gate
+    if gate_name == 'Rx':
+        raw_gate = Rx(params[0])  
+    elif gate_name == 'Ry':
+        raw_gate = Ry(params[0])  
+    elif gate_name == 'Rz':
+        raw_gate = Rz(params[0])
     # ==========================================
     # 1. Parse and Build the Raw Gate
     # ==========================================
     
     # Check if it's a dynamic Controlled-Gate (e.g., 'C-H', 'C-Z')
-    if gate_name.startswith("C-") and gate_name != "CNOT":
+    elif gate_name.startswith("C-") and gate_name != "CNOT":
         # Extract the base gate (e.g., "H" from "C-H")
         base_gate_name = gate_name.split("-")[1]
         
@@ -70,7 +79,7 @@ def apply_instruction(state: qt.Qobj, instruction: list) -> qt.Qobj:
     # ==========================================
     
     # Expand the raw gate to the full N-qubit system
-    expanded_gate = expand_operator(raw_gate, N=N, targets=targets)
+    expanded_gate = expand_operator(raw_gate, dims=[2]*N, targets=targets)
     
     # Apply the gate
     if state.isket:
@@ -78,7 +87,10 @@ def apply_instruction(state: qt.Qobj, instruction: list) -> qt.Qobj:
         return expanded_gate * state
     elif state.isoper:
         # Density Matrix evolution:
-        return expanded_gate * state * expanded_gate.dag()
+        if state.isunitary:
+            return expanded_gate * state
+        else:
+            return expanded_gate * state * expanded_gate.dag()
     else:
         raise TypeError("Input state must be a ket vector or a density matrix.")
     

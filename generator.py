@@ -7,8 +7,8 @@ Randomly chooses between 1-qubit and 2-qubit gates for each layer.
 
 import random
 import qutip as qt
+import numpy as np
 
-# Import the instruction parser from circuit engine
 from circuit_engine import apply_instruction
 
 def generate_random_circuit(num_qubits: int, num_layers: int, qubits: list[int] = None):
@@ -39,7 +39,7 @@ def generate_random_circuit(num_qubits: int, num_layers: int, qubits: list[int] 
     circuit_instructions = []  # Stores instructions for the visualizer
     
     # Standard 1-qubit gates available in dictionary
-    single_qubit_gate_names = ['X', 'Y', 'Z', 'H', 'S', 'T']
+    single_qubit_gate_names = ['H', 'X', 'Y', 'Z', 'S', 'T', 'Rx', 'Ry', 'Rz']
     
     # Identity matrix for N qubits (the baseline state for a new column)
     identity_op = qt.tensor([qt.qeye(2) for _ in range(num_qubits)])
@@ -59,15 +59,25 @@ def generate_random_circuit(num_qubits: int, num_layers: int, qubits: list[int] 
             
             # Apply a random single-qubit gate to each active qubit
             for q in qubits:
-                gate_name = random.choice(single_qubit_gate_names)
                 
-                # Apply the single-qubit instruction using the circuit engine
-                combined_gate = apply_instruction(combined_gate, [gate_name, [q]])
+                gate_type = random.choice(single_qubit_gate_names)
                 
-                # Record the actions
-                desc_parts.append(f"{gate_name}({q})")
-                current_layer_instructions.append([gate_name, [q]])
-                
+                if gate_type in ['Rx', 'Ry', 'Rz']:
+                    # Generate a random angle between 0 and 2*PI
+                    random_angle = random.uniform(0, 2 * np.pi)
+                    
+                    # Instruction format: ['Rx', [target_qubit], [angle]]
+                    combined_gate = apply_instruction(combined_gate, [gate_type, [q], [random_angle]])
+                    current_layer_instructions.append([gate_type, [q], [random_angle]])
+                    
+                    desc_parts.append(f"{gate_type}({random_angle:.2f}) on q{q}")
+                else:
+                    # Standard gates with no parameters
+                    combined_gate = apply_instruction(combined_gate, [gate_type, [q]])
+                    current_layer_instructions.append([gate_type, [q]])
+                    
+                    desc_parts.append(f"{gate_type} on q{q}")
+                    
             circuit_operators.append(combined_gate)
             circuit_descriptions.append("1-qubit layer: " + ", ".join(desc_parts))
             
@@ -76,10 +86,6 @@ def generate_random_circuit(num_qubits: int, num_layers: int, qubits: list[int] 
             # Randomly select one target and control qubit (or two targets for ISWAP)
             q1, q2 = random.sample(qubits, 2)
             
-            # Randomly pick a 2-qubit gate type
-            """
-            gate_type = random.choice(['CNOT', 'ISWAP'])
-            """
             # Randomly pick a 2-qubit gate type (Now with dynamic controlled gates!)
             two_qubit_options = ['CNOT', 'ISWAP', 'C-H', 'C-Z', 'C-X', 'C-Y']
             gate_type = random.choice(two_qubit_options)
