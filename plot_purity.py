@@ -59,14 +59,20 @@ def plot_purity_distributions(num_samples=10000):
     # 3. Bures Plot
     axes[2].hist(bures_purities, bins=fixed_bins, color='#d62728', density=True)
     axes[2].set_title("Bures (Surface-Biased)")
-    axes[2].set_xlabel("Purity: Tr(ρ²)")
+    axes[2].set_xlabel(r"Purity: $\text{Tr}(\rho^2)$", fontsize=12)
     axes[2].set_ylabel("Density")
     axes[2].grid(True, alpha=0.3)
+    
+
+
+    print(f"Mean HS Purity: {np.mean(hs_purities):.4f} (Theoretical: 0.8000)")
+    print(f"Mean Bures Purity: {np.mean(bures_purities):.4f} (Theoretical: 0.8750)")
 
     # Force X-axis bounds to match theoretical limits
     plt.xlim(0.48, 1.02)
     plt.tight_layout()
     print("Done! Displaying plot...")
     plt.show()
+
 if __name__ == "__main__":
     plot_purity_distributions(num_samples=10000)
