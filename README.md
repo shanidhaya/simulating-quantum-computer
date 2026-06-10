@@ -62,3 +62,4 @@ Built as part of the Physics F-Praktikum course, following theoretical foundatio
 * [x] **Quantum Noise Channels:** Implemented single-qubit environmental noise models from Nielsen & Chuang 8.3 (Bitflip, Phaseflip, Amplitude Damping).
 * [x] **$N$-Qubit Depolarizing Channel:** Implemented a scalable, parameter-driven depolarizing channel for arbitrary system sizes (using Eq. 8.100).
 * [x] **Deutsch-Jozsa Algorithm:** Built a quantum oracle (Blackbox) generator capable of creating Unitary matrices for Constant and Balanced functions, and successfully executed the algorithm to demonstrate single-query quantum advantage.
+* [x] **The Jupyter Notebook Challenge:** Upgraded the Oracle generator to dynamically evaluate an external classical Python function (`black_box.py`) and seamlessly executed a sweep from $N=1$ to $6$ to deduce its global properties in a single quantum query.

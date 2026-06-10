@@ -1,5 +1,6 @@
 import numpy as np
 import qutip as qt
+from black_box import black_box
 
 def create_dj_oracle(num_qubits: int, oracle_type: str) -> qt.Qobj:
     """
@@ -42,7 +43,30 @@ def create_dj_oracle(num_qubits: int, oracle_type: str) -> qt.Qobj:
     # Create the QuTiP Unitary Operator
     U_f = qt.Qobj(np.diag(diagonal_elements), dims=[[2]*num_qubits, [2]*num_qubits])
     return U_f
+def indToState(n, k):
+    """Provided by the notebook: Converts integer k to a binary array of length n."""
+    num = bin(k)[2:].zfill(n)
+    return np.array([int(x) for x in str(num)])
 
+def create_dynamic_oracle(num_qubits: int, func) -> qt.Qobj:
+    """
+    Evaluates an arbitrary blackbox python function to build the U_f matrix.
+    """
+    dim = 2 ** num_qubits
+    diagonal_elements = np.zeros(dim)
+    
+    for k in range(dim):
+        # 1. Convert the classical index into a binary array (e.g. 3 -> [0, 1, 1])
+        bit_string = indToState(num_qubits, k)
+        
+        # 2. Feed the binary array into the mystery blackbox
+        f_x = func(bit_string)
+        
+        # 3. Apply the Quantum Phase Kickback: (-1)^f(x)
+        diagonal_elements[k] = (-1) ** f_x
+        
+    # Build and return the massive QuTiP diagonal matrix
+    return qt.Qobj(np.diag(diagonal_elements), dims=[[2]*num_qubits, [2]*num_qubits])
 # --- Quick Test ---
 if __name__ == "__main__":
     print("Testing 3-Qubit Balanced Oracle Matrix:")
