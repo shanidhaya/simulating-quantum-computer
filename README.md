@@ -21,7 +21,8 @@ Built as part of the Physics F-Praktikum course, following theoretical foundatio
 * **Theoretical vs. Physical Benchmarking:** Automated test suites comparing the execution time of physical circuit tracing (simulating System + Environment) vs. mathematical Random Matrix Theory (RMT) formulations.
 * **Quantum Noise Simulation:** Implements environmental decoherence via Kraus operators, including Bitflip, Phaseflip, Amplitude Damping, and scalable $N$-qubit Depolarizing channels (Nielsen & Chuang Ch. 8).
 * **Quantum Algorithms:** Native execution of the Deutsch-Jozsa algorithm, featuring dynamic Oracle (Blackbox) generation to prove exponential quantum computational advantage.
-* **Interactive Jupyter Interface:** Culminating `F_Praktikum_Summary.ipynb` report combining LaTeX physics explanations with live, interactive code execution of the engine's features.
+* **Algorithmic Fault Tolerance:** Evaluates the resilience of quantum algorithms against environmental decoherence by executing density matrix simulations under various operator-sum noise channels and measuring accuracy decay.
+* **Interactive Jupyter Interface:** Culminating `summary.ipynb` report combining LaTeX physics explanations with live, interactive code execution and custom Matplotlib parameter sweeps.
 
 ## Project Structure
 * `quantum_gates.py`: Definitions for standard Pauli gates, rotation gates, and $N$-qubit controlled gates (CNOT, ISWAP, Toffoli). Contains the main `GATE_DICTIONARY`.
@@ -34,8 +35,11 @@ Built as part of the Physics F-Praktikum course, following theoretical foundatio
 * `benchmark_random_states.py`: High-resolution performance comparison demonstrating the exponential cost of circuit-based mixed state generation vs. NumPy matrix formulations.
 * `noise_channels.py`: Implementation of standard quantum error channels using Operator-Sum (Kraus) representation and scalable depolarizing formulas.
 * `noise_test.py`: Demonstration script explicitly showing how environmental noise channels degrade the purity and Bloch coordinates of pure states.
-* `deutsch_jozsa.py`: Oracle generator that builds global Unitary matrices for Constant and Balanced binary functions.
+* `black_box.py`: Modular classical Python script containing mystery logic for quantum evaluation.
+* `deutsch_jozsa.py`: Oracle generator that builds global Unitary matrices for Constant and Balanced binary functions, including dynamic classical code compilation.
 * `run_deutsch_josa.py`: Orchestrator script executing the full Deutsch-Jozsa algorithm sequence (Superposition -> Oracle -> Interference -> Measurement).
+* `deutch_jozsa_noisy.py`: Upgraded execution engine utilizing the von Neumann density matrix formulation ($U \rho U^\dagger$) to allow mid-circuit noise injection.
+* `noise_analysis_dj.py`: Parameter sweeping and Matplotlib plotting framework to evaluate algorithm accuracy decay against scaling noise probabilities.
 * `test_deutch_jozsa.py`, `test_circuit_states.py`, `test_random_states.py`: Unit test suites asserting the fundamental laws of quantum physics and the mathematical correctness of algorithm outputs.
 * `testing_playground.ipynb`: Jupyter Notebook sandboxes for interactive circuit development.
 * `F_Praktikum_Summary.ipynb`: Professional Jupyter Notebook summarizing the project methodology and providing an executable interface.
@@ -63,3 +67,6 @@ Built as part of the Physics F-Praktikum course, following theoretical foundatio
 * [x] **$N$-Qubit Depolarizing Channel:** Implemented a scalable, parameter-driven depolarizing channel for arbitrary system sizes (using Eq. 8.100).
 * [x] **Deutsch-Jozsa Algorithm:** Built a quantum oracle (Blackbox) generator capable of creating Unitary matrices for Constant and Balanced functions, and successfully executed the algorithm to demonstrate single-query quantum advantage.
 * [x] **The Jupyter Notebook Challenge:** Upgraded the Oracle generator to dynamically evaluate an external classical Python function (`black_box.py`) and seamlessly executed a sweep from $N=1$ to $6$ to deduce its global properties in a single quantum query.
+* [x] **Density Matrix Generalization for Algorithms:** Successfully transitioned the Deutsch-Jozsa engine to evaluate mixed states ($U \rho U^\dagger$) and mathematically verified it perfectly matches the vector-based Schrödinger picture.
+* [x] **Algorithmic Fault Tolerance Experiment:** Developed a custom Matplotlib parameter sweep evaluating algorithm accuracy while injecting quantum noise (Bitflip, Phaseflip) before and after the Oracle.
+* [x] **Noise Scaling Analysis:** Proved that superposition states are immune to Phase-basis Bitflips ($X|+\rangle = |+\rangle$) but highly vulnerable to Phaseflips, and demonstrated that noise degradation scales exponentially with system size ($N=3$ to $N=6$).
