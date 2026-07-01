@@ -63,20 +63,8 @@ def run_noisy_dj(num_qubits: int, secret_function, noise_channel=None, noise_pro
     if noise_loc == "post_H2":
         rho = apply_noise(rho, noise_channel, noise_prob, num_qubits)
         
-    # 5. Calculate Accuracy
+    # 5. Calculate Raw Measurement Probability
+    # The physics engine should ONLY return the probability of measuring |00...0>
     prob_000 = rho.diag()[0].real
     
-    # Check if we are testing a constant or balanced function to determine accuracy
-    is_constant = False
-    if isinstance(secret_function, str) and "constant" in secret_function:
-        is_constant = True
-    elif callable(secret_function):
-        # We assume for this benchmark that the user tracks which type it is,
-        # but defaulting to measuring the constant probability is safest for benchmarking
-        # Let's return the raw probability of |000> for benchmarking graphs
-        return prob_000
-    
-    if is_constant:
-        return prob_000
-    else:
-        return 1.0 - prob_000
+    return prob_000
