@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from deutch_jozsa_noisy import run_noisy_dj
+import matplotlib.pyplot as plt
+from noise_channels import bitflip_channel, phaseflip_channel, depolarizing_channel, amplitude_damping_channel
 
 def plot_custom_noise_analysis(experiments, num_points=20):
     """
@@ -130,3 +132,66 @@ def plot_all_combinations(n=3, num_points=20):
     
     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
     plt.show()
+    
+def plot_grouped_by_channel_and_function(n=3, num_points=20):
+    """
+    Generates an 8-plot grid (4 Channels x 2 Functions).
+    Each plot contains 4 curves representing the 4 noise locations.
+    """
+    
+
+    locations = ["pre_H1", "post_H1", "post_oracle", "post_H2"]
+    channels = [bitflip_channel, phaseflip_channel, depolarizing_channel, amplitude_damping_channel]
+    functions = [("Constant", "constant_0"), ("Balanced", "balanced")]
+
+    noise_probs = np.linspace(0, 1.0, num_points)
+
+    fig, axes = plt.subplots(len(channels), len(functions), figsize=(12, 16), sharex=True, sharey=True)
+    fig.suptitle(f"Deutsch-Jozsa Algorithm: Comprehensive Noise Vulnerability (N={n})", fontsize=18, y=0.98)
+
+    # Style dictionary to keep the 4 locations distinct and readable
+    loc_styles = {
+        "pre_H1": {"color": "red", "marker": "^", "label": "Pre-H1 (Initial)"},
+        "post_H1": {"color": "green", "marker": "o", "label": "Post-H1 (Superposition)"},
+        "post_oracle": {"color": "blue", "marker": "x", "label": "Post-Oracle (Interference)"},
+        "post_H2": {"color": "purple", "marker": "s", "label": "Post-H2 (Pre-Measurement)"}
+    }
+
+    for i, channel in enumerate(channels):
+        for j, (func_label, func_val) in enumerate(functions):
+            ax = axes[i, j]
+
+            for loc in locations:
+                acc_list = []
+                for p in noise_probs:
+                    prob_000 = run_noisy_dj(n, func_val, channel, p, loc)
+                    
+                    # Calculate true accuracy
+                    if func_label == "Constant":
+                        acc_list.append(prob_000)
+                    else:
+                        acc_list.append(1.0 - prob_000)
+
+                ax.plot(noise_probs, acc_list, color=loc_styles[loc]["color"],
+                        marker=loc_styles[loc]["marker"], markersize=5, 
+                        label=loc_styles[loc]["label"], 
+                        alpha=0.6, linewidth=2)
+
+            # Formatting
+            ch_name = channel.__name__.replace("_channel", "").replace("_", " ").title()
+            ax.set_title(f"{ch_name} Noise on {func_label} Function")
+            ax.axhline(0.5, color='gray', linestyle='--', alpha=0.5)
+            ax.grid(True, linestyle=':', alpha=0.6)
+
+            if i == len(channels) - 1:
+                ax.set_xlabel("Noise Probability (p or γ)")
+            if j == 0:
+                ax.set_ylabel("Accuracy")
+
+    # Add a single master legend at the top
+    handles, labels = ax.get_legend_handles_labels()
+    fig.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 0.95), ncol=4, fontsize=11)
+
+    plt.subplots_adjust(top=0.90, bottom=0.05, left=0.08, right=0.95, hspace=0.3)
+    plt.show()
+    
